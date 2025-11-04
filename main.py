@@ -5,7 +5,7 @@ from math import *
 
 pygame.init()
 
-WIDTH, HEIGHT = 1200, 900
+WIDTH, HEIGHT = 1424, 900
 FPS = 100
 
 # Configuração da tela 
