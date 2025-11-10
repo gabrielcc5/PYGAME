@@ -29,6 +29,13 @@ jogador = Player(WIDTH - 800, HEIGHT -100, scale=(40, 40))
 all_sprites = pygame.sprite.Group()
 all_sprites.add(jogador)
 
+# Grupo de obstáculos
+obstacle_group = pygame.sprite.Group()
+
+# Spawn timer (ms)
+last_spawn = pygame.time.get_ticks()
+spawn_interval = 1500  # aparece um obstáculo a cada 1.5s (ajuste)
+
 bg_x = 0
 bg_speed = 1
 
@@ -79,8 +86,30 @@ while running:
         screen.blit(background_image, (bg_x + WIDTH, 0))
 
         # Atualiza sprites do jogo
+        # Spawn de obstáculos
+        now = pygame.time.get_ticks()
+        if now - last_spawn > spawn_interval:
+            last_spawn = now
+            # spawn em x logo fora da tela
+            ob = Obstacle(WIDTH + 20, speed=4)
+            obstacle_group.add(ob)
+            all_sprites.add(ob)
+
         all_sprites.update()
         all_sprites.draw(screen)
+
+        # Colisão simples: volta ao menu ao colidir com um obstáculo
+        if pygame.sprite.spritecollideany(jogador, obstacle_group):
+            state = "menu"
+            # limpa obstáculos e reseta sprites (mantém o jogador)
+            for o in obstacle_group:
+                o.kill()
+            obstacle_group.empty()
+            all_sprites.empty()
+            # reseta jogador posição e adiciona de novo
+            jogador.rect.center = (WIDTH - 800, HEIGHT -100)
+            jogador.vel_y = 0
+            all_sprites.add(jogador)
 
     pygame.display.flip()
     clock.tick(FPS)
