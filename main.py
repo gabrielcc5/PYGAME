@@ -29,6 +29,8 @@ jogador = Player(WIDTH - 800, HEIGHT -100, scale=(40, 40))
 all_sprites = pygame.sprite.Group()
 all_sprites.add(jogador)
 
+bg_x = 0
+bg_speed = 1
 
 running = True
 while running:
@@ -66,8 +68,16 @@ while running:
         text_rect = play_text.get_rect(center=play_button_rect.center)
         screen.blit(play_text, text_rect)
 
+    bg_x -= bg_speed
+    if bg_x <= -WIDTH:
+        bg_x = 0
     else:
-        screen.blit(background_image, (0, 0))
+        bg_x -= bg_speed
+        if bg_x <= -WIDTH:
+            bg_x = 0
+
+        screen.blit(background_image, (bg_x, 0))
+        screen.blit(background_image, (bg_x + WIDTH, 0))
         all_sprites.update()
         all_sprites.draw(screen)
 
