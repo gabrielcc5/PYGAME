@@ -17,6 +17,7 @@ start_image = pygame.image.load("Assets/Imagens/start_image.jpeg")
 start_image = pygame.transform.scale(start_image, (WIDTH, HEIGHT))
 background_image = pygame.image.load("Assets/Imagens/background.png")
 background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
+player_image = pygame.image.load("Assets/Imagens/Player.png")
 
 # Estado do jogo e botão Play
 state = "menu"
@@ -25,6 +26,9 @@ play_text = font.render("PLAY", True, (255, 255, 255))
 play_button_width, play_button_height = 240, 90
 play_button_rect = pygame.Rect(0, 0, play_button_width, play_button_height)
 play_button_rect.center = (WIDTH // 2, HEIGHT // 2 + 150)
+jogador = Player(WIDTH // 4, HEIGHT // 2, scale=(40, 40))
+all_sprites = pygame.sprite.Group()
+all_sprites.add(jogador)
 
 
 running = True
@@ -38,6 +42,7 @@ while running:
         screen.blit(play_text, text_rect)
     else:
         screen.blit(background_image, (0, 0))
+        all_sprites.draw(screen)
 
     clock.tick(FPS)
     

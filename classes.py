@@ -13,3 +13,11 @@ class Background:
 
     def draw(self, screen):
         screen.blit(self.image, (0, 0))
+
+class Player(pygame.sprite.Sprite):
+    def __init__(self, x, y, image_path="Assets/Imagens/Player.png", scale=(50, 50)):
+        super().__init__()
+        original_image = pygame.image.load(image_path).convert_alpha()
+        self.image = original_image
+        self.rect = self.image.get_rect(center=(x, y))
+        self.speed = 5
