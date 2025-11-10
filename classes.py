@@ -25,6 +25,9 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center=(x, y))
         self.speed = 5
 
+        # Cria um rect de colisão menor (margin de 8px) para evitar sensibilidade excessiva
+        self.collision_rect = self.rect.inflate(-16, -16)  # reduz 8px de cada lado
+
         self.vel_y = 0
         self.gravity = 0.6 
         self.jump_strength = -15
@@ -33,6 +36,9 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.vel_y += self.gravity
         self.rect.y += int(self.vel_y)
+
+        # Atualiza o collision_rect junto com o rect visual
+        self.collision_rect.center = self.rect.center
 
         ground_y = HEIGHT - 70
         if self.rect.bottom >= ground_y:
@@ -72,7 +78,12 @@ class Obstacle(pygame.sprite.Sprite):
         self.rect.bottom = ground_y
         self.speed = speed
 
+        # Cria um rect de colisão menor (margin de 6px) para evitar sensibilidade excessiva
+        self.collision_rect = self.rect.inflate(-12, -12)  # reduz 6px de cada lado
+
     def update(self):
         self.rect.x -= self.speed
+        # Atualiza collision_rect junto com rect visual
+        self.collision_rect.center = self.rect.center
         if self.rect.right < 0:
             self.kill()
