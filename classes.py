@@ -15,7 +15,7 @@ class Background:
         screen.blit(self.image, (0, 0))
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, x, y, image_path="Assets/Imagens/Player.png", scale=(50, 50)):
+    def __init__(self, x, y, image_path="Assets/Imagens/Player.png", scale=(20, 20)):
         super().__init__()
         original_image = pygame.image.load(image_path).convert_alpha()
         self.image = original_image

@@ -18,6 +18,7 @@ start_image = pygame.transform.scale(start_image, (WIDTH, HEIGHT))
 background_image = pygame.image.load("Assets/Imagens/background.png")
 background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 player_image = pygame.image.load("Assets/Imagens/Player.png")
+player_image = pygame.transform.scale(player_image, (60,60))
 
 # Estado do jogo e botão Play
 state = "menu"
@@ -52,6 +53,6 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             if state == "menu" and play_button_rect.collidepoint(event.pos):
                 state = "game"
-    pygame.display.flip() 
+    pygame.display.flip()
 
 pygame.quit()
