@@ -68,16 +68,17 @@ while running:
         text_rect = play_text.get_rect(center=play_button_rect.center)
         screen.blit(play_text, text_rect)
 
-    bg_x -= bg_speed
-    if bg_x <= -WIDTH:
-        bg_x = 0
-    else:
+    # Desenha e atualiza o jogo somente quando no estado 'game'
+    if state == "game":
         bg_x -= bg_speed
         if bg_x <= -WIDTH:
             bg_x = 0
 
+        # Desenha duas cópias do background para scrolling contínuo
         screen.blit(background_image, (bg_x, 0))
         screen.blit(background_image, (bg_x + WIDTH, 0))
+
+        # Atualiza sprites do jogo
         all_sprites.update()
         all_sprites.draw(screen)
 
