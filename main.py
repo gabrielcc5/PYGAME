@@ -7,6 +7,10 @@ import json
 import os
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("Assets/Som /videoplayback.mp3")
+jump_sound = pygame.mixer.Sound("Assets/Som /Jump.wav")
+jump_sound.set_volume(3.20)
 
 # Sistema de recorde
 HIGHSCORE_FILE = "highscore.json"
@@ -92,9 +96,12 @@ while running:
                 last_spawn = game_start_time
                 obstacle_speed = 4
                 last_difficulty_increase = game_start_time
+                pygame.mixer.music.set_volume(0.3)
+                pygame.mixer.music.play(-1)
             elif state == "win":
                 # Volta ao menu
                 state = "menu"
+                pygame.mixer.music.stop()
 
         elif event.type == pygame.KEYDOWN:
             # Espaço para pular no jogo
@@ -105,6 +112,10 @@ while running:
                 except Exception:
                     if hasattr(jogador, 'gravidade'):
                         jogador.gravidade = -6
+                try:
+                    jump_sound.play()
+                except Exception:
+                    pass
             if state == "menu" and event.key in (pygame.K_RETURN, pygame.K_KP_ENTER, pygame.K_SPACE):
                 state = "game"
                 # Inicializa o tempo de início do jogo
@@ -112,9 +123,12 @@ while running:
                 last_spawn = game_start_time
                 obstacle_speed = 4
                 last_difficulty_increase = game_start_time
+                pygame.mixer.music.set_volume(0.5)
+                pygame.mixer.music.play(-1)
             elif state == "win" and event.key == pygame.K_SPACE:
                 # Volta ao menu
                 state = "menu"
+                pygame.mixer.music.stop()
 
     screen.fill((30, 30, 30))
 
@@ -218,6 +232,7 @@ while running:
                     save_highscore(highscore)
                 
                 state = "menu"
+                pygame.mixer.music.stop()
                 # limpa obstáculos e reseta sprites (mantém o jogador)
                 for o in obstacle_group:
                     o.kill()
@@ -265,6 +280,7 @@ while running:
             # Após 5 segundos, volta automaticamente ao menu
             state = "menu"
             win_time = None
+            pygame.mixer.music.stop()
         
         # Texto para voltar ao menu
         restart_text = small_font.render("Clique para voltar ao menu", True, (200, 200, 200))
