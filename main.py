@@ -85,7 +85,7 @@ WIN_DELAY = 5000  # 5 segundos em ms
 win_score = None 
 
 # habilitar/desabilitar colisões
-COLLISIONS_ENABLED = True
+COLLISIONS_ENABLED = False  # desativado para testes
 bg_x = 0
 bg_speed = 1
 
@@ -166,6 +166,11 @@ while running:
         if elapsed_time >= GAME_DURATION:
             # Salva a porcentagem final (será 100 aqui)
             win_score = int(min(elapsed_time / GAME_DURATION * 100, 100))
+            # Atualiza recorde caso necessário ao vencer
+            if win_score > highscore:
+                highscore = win_score
+                save_highscore(highscore)
+
             state = "win"
             # Marca o tempo da vitória (primeira vez que chega aqui)
             if win_time is None:
@@ -274,7 +279,7 @@ while running:
         
         
         # Mostra o highscore
-        if highscore == 100:
+        if highscore == 99:
             record_text = small_font.render(f"Novo Highscore! 100%", True, (0, 255, 0))
         else:
             record_text = small_font.render(f"Highscore: {highscore}%", True, (200, 200, 200))
