@@ -8,8 +8,8 @@ import os
 
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.music.load("PYGAME/Assets/Som/videoplayback.mp3")
-jump_sound = pygame.mixer.Sound("PYGAME/Assets/Som/Jump.wav")
+pygame.mixer.music.load("Assets/Sons/music.mp3")
+jump_sound = pygame.mixer.Sound("Assets/Sons/jump.mp3")
 jump_sound.set_volume(3.20)
 
 # Sistema de recorde
