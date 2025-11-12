@@ -49,6 +49,10 @@ start_image = pygame.transform.scale(start_image, (WIDTH, HEIGHT))
 background_image = pygame.image.load("Assets/Imagens/background.png")
 background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 player_image = pygame.image.load("Assets/Imagens/Player.png")
+# Imagem de vitória (final)
+victory_image = pygame.image.load("Assets/Imagens/victory.png").convert_alpha()
+victory_image = pygame.transform.scale(victory_image, (WIDTH, HEIGHT))  
+
 # Estado do jogo e botão Play
 state = "menu"
 font = pygame.font.SysFont(None, 64)
@@ -78,6 +82,7 @@ last_difficulty_increase = 0
 # Variáveis para tela de vitória
 win_time = None  # Marca quando a vitória aconteceu
 WIN_DELAY = 5000  # 5 segundos em ms
+win_score = None 
 
 bg_x = 0
 bg_speed = 1
@@ -157,6 +162,8 @@ while running:
         
         # Verifica se o jogador venceu (45 segundos)
         if elapsed_time >= GAME_DURATION:
+            # Salva a porcentagem final (será 100 aqui)
+            win_score = int(min(elapsed_time / GAME_DURATION * 100, 100))
             state = "win"
             # Marca o tempo da vitória (primeira vez que chega aqui)
             if win_time is None:
@@ -165,6 +172,7 @@ while running:
             for o in obstacle_group:
                 o.kill()
             obstacle_group.empty()
+
         
         # Aumenta dificuldade a cada 15 segundos
         elapsed_seconds = (now - game_start_time) // 1000  # tempo em segundos
@@ -254,10 +262,12 @@ while running:
         except Exception:
             screen.fill((30, 30, 30))
 
-        # Mensagem YOU WIN! centralizada
-        win_message_text = font.render("YOU WIN!", True, (0, 255, 0))
-        win_rect = win_message_text.get_rect(center=(WIDTH // 2, HEIGHT // 2))
-        screen.blit(win_message_text, win_rect)
+        # se quisermos mostrar a imagem apenas quando o jogador completou 100%
+        if win_score == 100:
+            img_rect = victory_image.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 60))
+            screen.blit(victory_image, img_rect)
+
+        
         
         # Mostra o highscore
         if highscore == 100:
@@ -289,5 +299,7 @@ while running:
 
     pygame.display.flip()
     clock.tick(FPS)
+
+
 
 pygame.quit()
