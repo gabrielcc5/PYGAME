@@ -80,5 +80,5 @@ Tutoriais do site:
 PythonProgramming.net 
 Pygame.org
 
-Feito com ❤️ em Python + Pygame
+Feito em Python + Pygame
 Divirta-se saltando entre os spikes!
