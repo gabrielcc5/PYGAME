@@ -82,3 +82,6 @@ Pygame.org
 
 Feito em Python + Pygame
 Divirta-se saltando entre os spikes!
+
+Link para vídeo do jogo funcionando:
+https://youtu.be/m_YzZo_HARA
