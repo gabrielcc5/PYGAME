@@ -84,6 +84,8 @@ win_time = None  # Marca quando a vitória aconteceu
 WIN_DELAY = 5000  # 5 segundos em ms
 win_score = None 
 
+# habilitar/desabilitar colisões
+COLLISIONS_ENABLED = True
 bg_x = 0
 bg_speed = 1
 
@@ -230,30 +232,32 @@ while running:
         screen.blit(percentage_text, text_rect)
 
         # Colisão usando os rects de colisão reduzidos (menos sensível)
-        for obstacle in obstacle_group:
-            if jogador.collision_rect.colliderect(obstacle.collision_rect):
-                # Calcula o tempo alcançado nesta tentativa
-                current_score = percentage
-                # Atualiza recorde se necessário
-                if current_score > highscore:
-                    highscore = current_score
-                    save_highscore(highscore)
-                
-                state = "menu"
-                pygame.mixer.music.stop()
-                # limpa obstáculos e reseta sprites (mantém o jogador)
-                for o in obstacle_group:
-                    o.kill()
-                obstacle_group.empty()
-                all_sprites.empty()
-                # reseta jogador posição e adiciona de novo
-                jogador.rect.center = (WIDTH - 800, HEIGHT -100)
-                jogador.vel_y = 0
-                jogador.collision_rect.center = jogador.rect.center
-                all_sprites.add(jogador)
-                # reseta velocidade para o próximo jogo
-                obstacle_speed = 4
-                break
+        # Protegido por flag `COLLISIONS_ENABLED` para permitir testes sem morrer
+        if COLLISIONS_ENABLED:
+            for obstacle in obstacle_group:
+                if jogador.collision_rect.colliderect(obstacle.collision_rect):
+                    # Calcula o tempo alcançado nesta tentativa
+                    current_score = percentage
+                    # Atualiza recorde se necessário
+                    if current_score > highscore:
+                        highscore = current_score
+                        save_highscore(highscore)
+                    
+                    state = "menu"
+                    pygame.mixer.music.stop()
+                    # limpa obstáculos e reseta sprites (mantém o jogador)
+                    for o in obstacle_group:
+                        o.kill()
+                    obstacle_group.empty()
+                    all_sprites.empty()
+                    # reseta jogador posição e adiciona de novo
+                    jogador.rect.center = (WIDTH - 800, HEIGHT -100)
+                    jogador.vel_y = 0
+                    jogador.collision_rect.center = jogador.rect.center
+                    all_sprites.add(jogador)
+                    # reseta velocidade para o próximo jogo
+                    obstacle_speed = 4
+                    break
 
     # Tela de vitória
     elif state == "win":
@@ -277,22 +281,15 @@ while running:
         record_rect = record_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 80))
         screen.blit(record_text, record_rect)
         
-        # Calcula tempo restante para voltar ao menu
+        # Aguarda WIN_DELAY ms e volta automaticamente ao menu — sem mostrar contador
         now = pygame.time.get_ticks()
-        time_remaining = max(0, (WIN_DELAY - (now - win_time)) // 1000)
-        
-        # Texto com countdown
-        if time_remaining > 0:
-            countdown_text = small_font.render(f"Voltando em {time_remaining}s...", True, (200, 200, 200))
-            countdown_rect = countdown_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
-            screen.blit(countdown_text, countdown_rect)
-        else:
-            # Após 5 segundos, volta automaticamente ao menu
+        if (now - win_time) >= WIN_DELAY:
+            # Após WIN_DELAY, volta automaticamente ao menu
             state = "menu"
             win_time = None
             pygame.mixer.music.stop()
-        
-        # Texto para voltar ao menu
+
+        # Texto para voltar ao menu (permite clique manual antes do tempo)
         restart_text = small_font.render("Clique para voltar ao menu", True, (200, 200, 200))
         restart_rect = restart_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
         screen.blit(restart_text, restart_rect)
