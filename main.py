@@ -85,7 +85,7 @@ WIN_DELAY = 5000  # 5 segundos em ms
 win_score = None 
 
 # habilitar/desabilitar colisões
-COLLISIONS_ENABLED = False  # desativado para testes
+COLLISIONS_ENABLED = True  # desativado para testes
 bg_x = 0
 bg_speed = 1
 
